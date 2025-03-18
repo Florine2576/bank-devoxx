@@ -1,0 +1,45 @@
+# Bank-Devoxx Application Architecture Rules
+
+## Bounded Context Structure
+- Each feature should be implemented as a separate bounded context (e.g., navigation, transactions, profil)
+- Each bounded context should have its own directory under `src/`
+- Every bounded context must have a `package-info.ts` file that extends BusinessContext
+
+## Hexagonal Architecture
+- Each bounded context should follow hexagonal architecture with these layers:
+  - domain/ - Core business logic and entities (directly in domain, not in model subfolder)
+  - application/ - Application services and use cases
+  - infrastructure/
+    - primary/ - UI components, controllers, entry points
+    - secondary/ - Repositories, external services, adapters
+
+## Component Structure (4-File Pattern)
+- Each component must be split into 4 separate files:
+  1. ComponentName.vue - Imports the HTML, CSS, and TS files
+    ```vue
+    <script lang="ts" src="./ComponentName.component.ts"></script>
+    <template src="./ComponentName.html"></template>
+    <style src="./ComponentName.css"></style>
+    ```
+  2. ComponentName.html - Contains only the template HTML
+  3. ComponentName.css - Contains component-specific styles
+  4. ComponentName.component.ts - Contains TypeScript logic using defineComponent
+
+## Router Configuration
+- Router should be configured in src/router/index.ts
+- Each route should lazy-load components using dynamic imports
+- Route paths should match the bounded context names
+
+## Naming Conventions
+- Bounded context directories use camelCase
+- Vue components use PascalCase followed by descriptive type (e.g., ProfilPage, NavbarComponent)
+- Component files follow the 4-file pattern with consistent naming
+- CSS should follow BEM naming convention
+
+## CSS Best Practices
+- Use CSS variables for consistent theming
+- Define global variables in App.css
+- Use specific classes to avoid style conflicts
+
+## Testing & Data Selectors
+- Use data-selector attributes for testing (e.g., data-selector="nav-item-transaction")
