@@ -9,3 +9,20 @@
   color: var(--text-color);
   margin-bottom: 20px;
 }
+
+.accounts-section {
+  margin-bottom: 30px;
+}
+
+.accounts-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 16px;
+}
+
+.accounts-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
