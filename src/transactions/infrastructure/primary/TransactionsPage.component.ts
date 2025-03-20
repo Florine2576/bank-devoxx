@@ -1,12 +1,14 @@
 import { defineComponent, ref, onMounted, inject } from 'vue'
 import type { Account } from '../../../transactions/domain/Account'
 import AccountCard from './AccountCard.vue'
+import TransactionsTable from './TransactionsTable.vue'
 import { TransactionService, transactionServiceKey } from '../../application/TransactionService'
 
 export default defineComponent({
   name: 'TransactionsPage',
   components: {
     AccountCard,
+    TransactionsTable,
   },
   setup() {
     const transactionService = inject<TransactionService>(transactionServiceKey)
