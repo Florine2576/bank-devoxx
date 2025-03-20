@@ -5,7 +5,7 @@ import type { Account } from '../../domain/Account';
 export class AccountApiRepository implements AccountRepository {
   async fetchAccounts(): Promise<Account[]> {
     try {
-      const response = await fetch('/api/accounts');
+      const response = await fetch('http://localhost:8080/api/accounts');
       const data = await response.json();
 
       return [
