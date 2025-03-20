@@ -1,3 +1,16 @@
 <div class="transactions-page">
   <h1 class="transactions-title">Transactions</h1>
+  
+  <section class="accounts-section">
+    <h2 class="accounts-title">Mes comptes</h2>
+    <div class="accounts-container">
+      <AccountCard 
+        v-for="account in accounts" 
+        :key="account.type" 
+        :account="account" 
+      />
+    </div>
+  </section>
+
+  <TransactionsTable />
 </div>

@@ -1,0 +1,48 @@
+.account-card {
+  border-radius: 12px;
+  overflow: hidden;
+  color: white;
+  width: 280px;
+  height: 170px;
+  display: flex;
+  flex-direction: column;
+}
+
+.account-card-checking {
+  background: linear-gradient(135deg, #5050FF 0%, #3030FF 100%);
+}
+
+.account-card-saving {
+  background: linear-gradient(135deg, #40D0A0 0%, #30B090 100%);
+}
+
+.account-card-header {
+  padding: 16px;
+  flex: 1;
+}
+
+.account-card-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.account-card-content {
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  text-align: center;
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.account-card-label {
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.account-card-amount {
+  font-size: 1.8rem;
+  font-weight: bold;
+}

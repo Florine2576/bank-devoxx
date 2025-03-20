@@ -1,6 +1,7 @@
 .transactions-page {
   padding: 20px;
   margin-left: var(--sidebar-width);
+  width: 100%
 }
 
 .transactions-title {
@@ -8,4 +9,22 @@
   font-weight: bold;
   color: var(--text-color);
   margin-bottom: 20px;
+}
+
+.accounts-section {
+  margin-bottom: 30px;
+}
+
+.accounts-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 16px;
+}
+
+.accounts-container {
+  display: flex;
+  gap: 150px;
+  flex-wrap: wrap;
+  justify-content: center;
 }

@@ -1,0 +1,50 @@
+[
+  {
+    "description": "Cloth&Co",
+    "id": "12548796",
+    "type": "Shopping",
+    "account": "Checking account",
+    "date": "2025-03-28",
+    "amount": -2500
+  },
+  {
+    "description": "Freepik Sales",
+    "id": "12548796",
+    "type": "Transfer",
+    "account": "Checking account",
+    "date": "2025-02-25",
+    "amount": 750
+  },
+  {
+    "description": "Mobile Service",
+    "id": "12548796",
+    "type": "Service",
+    "account": "Checking account",
+    "date": "2025-01-20",
+    "amount": -150
+  },
+  {
+    "description": "Wilson",
+    "id": "12548796",
+    "type": "Transfer",
+    "account": "Checking account",
+    "date": "2025-01-15",
+    "amount": -1050
+  },
+  {
+    "description": "Emilly",
+    "id": "12548796",
+    "type": "Transfer",
+    "account": "Checking account",
+    "date": "2025-01-14",
+    "amount": 840
+  },
+  {
+    "description": "Emilly",
+    "id": "12548796",
+    "type": "Transfer",
+    "account": "Savings account",
+    "date": "2025-01-14",
+    "amount": 840
+  }
+]

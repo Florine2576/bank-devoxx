@@ -1,0 +1,9 @@
+<div class="account-card" :class="accountClass">
+  <div class="account-card-header">
+    <h2 class="account-card-title" :data-selector="`${dataSelector}-title`">{{ accountTitle }}</h2>
+  </div>
+  <div class="account-card-content">
+    <div class="account-card-label">Solde</div>
+    <div class="account-card-amount" :data-selector="`${dataSelector}-amount`">{{ accountAmount }}€</div>
+  </div>
+</div>
