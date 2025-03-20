@@ -16,7 +16,7 @@ export default defineComponent({
       return this.account.type === AccountType.CHECKING ? 'Compte courant' : 'Compte épargne';
     },
     accountAmount(): string {
-      return this.account.amount.toString();
+      return this.account.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
     },
     accountClass(): string {
       return this.account.type === AccountType.CHECKING ? 'account-card-checking' : 'account-card-saving';
