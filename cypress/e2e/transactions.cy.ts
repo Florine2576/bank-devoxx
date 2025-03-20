@@ -2,10 +2,7 @@ import { dataSelector } from '../dataselector'
 
 describe('Transactions', () => {
   beforeEach(() => {
-    cy.intercept('/api/accounts', {
-      checking: 6544,
-      saving: 9644,
-    }).as('account');
+    cy.intercept('/api/accounts', { fixture: 'accounts.json' }).as('account');
 
     cy.intercept('/api/accounts/transactions', { fixture: 'transactions.json' }).as('transactions');
   });
