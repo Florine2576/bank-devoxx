@@ -1,6 +1,7 @@
 .transactions-page {
   padding: 20px;
   margin-left: var(--sidebar-width);
+  width: 100%
 }
 
 .transactions-title {
@@ -23,6 +24,7 @@
 
 .accounts-container {
   display: flex;
-  gap: 20px;
+  gap: 150px;
   flex-wrap: wrap;
+  justify-content: center;
 }
