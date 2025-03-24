@@ -40,6 +40,7 @@
 - Use CSS variables for consistent theming
 - Define global variables in App.css
 - Use specific classes to avoid style conflicts
+- Use hyphens (-) instead of underscores (_) for HTML class names and CSS selectors (e.g., `account-card-label` not `account_card_label`)
 
 ## Testing & Data Selectors
 - Use data-selector attributes for testing (e.g., data-selector="nav-item-transaction")
@@ -51,6 +52,9 @@
   - 'transaction-rows' for table rows
   - 'transactions-header' for column headers
   - 'transactions-{property}' for each transaction property cell (description, id, type, account, date, amount)
+- To run tests use : 
+    - npm run test:e2e:headless
+    - npm run test:unit
 
 ## API Mocking
 - Cypress tests should intercept API calls and provide fixture data
@@ -124,3 +128,88 @@
 - Each bounded context should be self-contained
 - Inter-context communication should only happen through well-defined interfaces
 - Primary adapters in one context can call secondary adapters in another context
+
+## Incremental Implementation Workflow
+- Implement one UI element at a time with only the necessary code for that element
+- Run the appropriate tests for each element after implementation:
+  - E2E tests with `npm run test:e2e:headless`
+  - Architecture tests with `npm run test:unit`
+- Verify the visual appearance matches the mockup using browser preview
+- Only proceed to implementing the next element after:
+  - All tests are passing for the current element
+  - The visual appearance matches the mockup
+  - The code follows hexagonal architecture principles
+
+## API Data Mapping
+
+### Domain Model Definitions
+- Account domain model should include an enum for account types:
+  ```typescript
+  export enum AccountType {
+    CHECKING = 'CHECKING',
+    SAVING = 'SAVING'
+  }
+  ```
+- Transaction domain model should represent dates as JavaScript Date objects to enable proper formatting
+
+### Repository Layer Implementation
+- Each bounded context should have dedicated repository interfaces in the domain layer
+- Repository implementations in the secondary adapter layer should:
+  - Transform backend data structures to domain models
+  - Handle API request/response lifecycle
+  - Implement error handling with appropriate fallbacks
+  - Convert raw date strings from API to JavaScript Date objects
+  - Map backend account type strings to frontend AccountType enum values
+
+### Data Formatting Standards
+- Date formatting:
+  - Repository layer: Convert ISO string dates (`YYYY-MM-DD`) to JavaScript Date objects
+  - Presentation layer: Format dates as `DD Month YYYY` using French month names:
+    ```
+    ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 
+     'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+    ```
+  - Example: "28 Mars 2025"
+
+- Amount formatting:
+  - Monetary values should display with the following format:
+    - Thousand separator: space character
+    - Sign prefix: + for positive amounts, - for negative amounts
+    - Currency suffix: € symbol
+    - Example: "+1 234€" or "-2 500€"
+  - Style with different colors based on amount sign:
+    - Positive amounts: Use var(--positive-amount) color
+    - Negative amounts: Use var(--negative-amount) color
+
+- Account type display:
+  - Backend type "checking" should display as "Checking account" or "Compte courant" in French
+  - Backend type "saving" should display as "Savings account" or "Compte épargne" in French
+
+### Implementation Patterns
+- Use pure functions for formatting logic:
+  - Create standalone formatting functions for dates and monetary amounts
+  - These functions should be implemented in components that display this data
+  - Apply consistent formatting across all components displaying the same data type
+  - Example pattern for amount formatting:
+    ```typescript
+    const formatAmount = (amount: number): string => {
+      // Logic to format with thousands separator, sign prefix, and € suffix
+    }
+    ```
+  - Example pattern for date formatting:
+    ```typescript
+    const formatDate = (date: Date): string => {
+      // Logic to format using French month names
+    }
+    ```
+
+### API Response Transformation
+- When fetching accounts data:
+  - Transform flat structure to array of typed account objects
+  - Map backend property names to domain model property names
+  - Example mapping: `{checking: 6544, saving: 9644}` → `[{type: AccountType.CHECKING, amount: 6544}, {type: AccountType.SAVING, amount: 9644}]`
+
+- When fetching transactions data:
+  - Convert date strings to Date objects
+  - Preserve other properties as-is
+  - Example: `{date: "2025-03-28", ...}` → `{date: new Date("2025-03-28"), ...}`
