@@ -43,3 +43,84 @@
 
 ## Testing & Data Selectors
 - Use data-selector attributes for testing (e.g., data-selector="nav-item-transaction")
+- Every UI element that needs to be tested must have a data-selector attribute
+- Use the dataSelector utility function from cypress/dataselector.ts for selector references
+- Navigation items must have data-selectors with format "nav-item-{contextName}"
+- Account information elements must use data-selectors with format "{accountType}-account-{property}"
+- Transaction table must use specific data-selectors:
+  - 'transaction-rows' for table rows
+  - 'transactions-header' for column headers
+  - 'transactions-{property}' for each transaction property cell (description, id, type, account, date, amount)
+
+## API Mocking
+- Cypress tests should intercept API calls and provide fixture data
+- Fixtures should be stored in cypress/fixtures/ directory with meaningful names
+- API endpoints should follow RESTful conventions
+
+## Dependency Injection
+- Use Vue's inject/provide system for dependency injection
+- Define typed injection keys using Symbol and InjectionKey interface from Vue
+- Export injection keys with descriptive names ending with 'Key' (e.g., `transactionServiceKey`)
+- Validate injected dependencies with null checks in component setup methods
+
+## Application Services
+- Application services should act as facades to domain logic
+- Services should be injectable classes with descriptive names ending with 'Service'
+- Service methods should return Promises for async operations
+- Service dependencies should be injected via constructor
+- Application services must not depend on infrastructure components
+
+## Domain Models
+- Domain entities should be defined as TypeScript interfaces
+- Prefer readonly properties for immutable entity attributes
+- Use descriptive, domain-specific naming for entity properties
+- Repository interfaces should be defined in the domain layer
+- Domain models must only depend on other domain models or shared kernels
+
+## Repository Pattern
+- Define repository interfaces in the domain layer
+- Implement repositories in the infrastructure/secondary layer
+- Repository method names should begin with verbs like 'fetch', 'save', 'delete'
+- Repository implementations should handle infrastructure concerns (API calls, error handling)
+
+## Component Implementation
+- Use Vue's defineComponent for type safety in components
+- Components should have a descriptive name property matching the filename
+- Register child components explicitly in the components object
+- Use the setup() function for component logic
+- Reference domain types with explicit imports
+
+## Error Handling
+- Use try/catch blocks for async operations
+- Provide meaningful error messages
+- Log errors to console with appropriate error level and context
+- Set fallback/empty states when errors occur
+
+## Imports and Code Organization
+- Use relative paths for imports within the same bounded context
+- Use absolute paths with '@' alias for imports across bounded contexts
+- Group imports by type (Vue, domain, infrastructure, etc.)
+- Export types and interfaces with the 'type' keyword
+
+## Hexagonal Architecture Enforcement
+- Domain layer must not depend on anything outside of domain or shared kernels
+- Application layer must not depend on infrastructure components
+- Primary adapters must not depend on secondary adapters
+- Secondary adapters must not depend on application services
+- Secondary adapters must not depend on primary adapters within the same context
+- Bounded contexts must not depend on domain models from other contexts unless explicitly defined as shared kernels
+
+## TypeScript Adapters Pattern
+- TypeScript adapters in primary layer must have names starting with 'TypeScript'
+- TypeScript adapters must only be called from secondary adapters
+- This pattern is required when connecting two bounded contexts
+
+## SharedKernel Usage
+- SharedKernel classes should be used for cross-cutting concerns
+- Bounded contexts may depend on SharedKernel components
+- SharedKernel should be kept minimal to avoid tight coupling
+
+## Context Boundaries
+- Each bounded context should be self-contained
+- Inter-context communication should only happen through well-defined interfaces
+- Primary adapters in one context can call secondary adapters in another context
