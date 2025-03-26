@@ -1,0 +1,43 @@
+<div class="transactions-section">
+  <div class="transactions-header">
+    <h2 class="section-title">Transactions récentes</h2>
+  </div>
+  
+  <div class="transactions-table-container" v-if="!loading && !error">
+    <table class="transactions-table">
+      <thead>
+        <tr>
+          <th data-selector="transactions-header">Description</th>
+          <th data-selector="transactions-header">Identifiant</th>
+          <th data-selector="transactions-header">Type</th>
+          <th data-selector="transactions-header">Compte</th>
+          <th data-selector="transactions-header">Date</th>
+          <th data-selector="transactions-header">Montant</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(transaction, index) in transactions" :key="index" data-selector="transaction-rows">
+          <td data-selector="transactions-description">{{ transaction.description }}</td>
+          <td data-selector="transactions-id">{{ transaction.id }}</td>
+          <td data-selector="transactions-type">{{ transaction.type }}</td>
+          <td data-selector="transactions-account">{{ transaction.account }}</td>
+          <td data-selector="transactions-date">{{ formatDate(transaction.date) }}</td>
+          <td 
+            data-selector="transactions-amount" 
+            :class="getAmountClass(transaction.amount)"
+          >
+            {{ formatAmount(transaction.amount) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="transactions-loading" v-if="loading">
+    Chargement des transactions...
+  </div>
+  
+  <div class="transactions-error" v-if="error">
+    {{ error }}
+  </div>
+</div>

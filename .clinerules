@@ -8,10 +8,22 @@
 ## Hexagonal Architecture
 - Each bounded context should follow hexagonal architecture with these layers:
   - domain/ - Core business logic and entities (directly in domain, not in model subfolder)
+    - Entity models should be defined in their own files (e.g., `Account.ts`)
+    - Repository interfaces must be defined in the domain layer (e.g., `AccountRepository.ts`)
+    - No dependencies outside domain or shared kernels allowed
   - application/ - Application services and use cases
+    - Services must receive repository interfaces via constructor injection
+    - Services must not directly instantiate repositories
+    - No direct dependencies on infrastructure implementations
+    - Service injection keys must be exported with Symbol
   - infrastructure/
     - primary/ - UI components, controllers, entry points
+      - Must use Vue's inject to obtain application services
+      - Must never directly reference or instantiate secondary adapters
+      - Must handle presentation logic only
     - secondary/ - Repositories, external services, adapters
+      - Must implement domain repository interfaces
+      - Should handle all infrastructure concerns (API, storage, etc.)
 
 ## Component Structure (4-File Pattern)
 - Each component must be split into 4 separate files:
@@ -63,29 +75,62 @@
 
 ## Dependency Injection
 - Use Vue's inject/provide system for dependency injection
-- Define typed injection keys using Symbol and InjectionKey interface from Vue
+- Define typed injection keys using Symbol and InjectionKey interface from Vue:
+  ```typescript
+  export const accountServiceKey: InjectionKey<AccountService> = Symbol('AccountService');
+  ```
 - Export injection keys with descriptive names ending with 'Key' (e.g., `transactionServiceKey`)
-- Validate injected dependencies with null checks in component setup methods
+- Validate injected dependencies with null checks in component setup methods:
+  ```typescript
+  const accountService = inject<AccountService>(accountServiceKey);
+  if (!accountService) {
+    throw new Error('AccountService not provided');
+  }
+  ```
+- Application services must never be instantiated in components
+- Do not use service locator patterns that reference infrastructure components
 
 ## Application Services
 - Application services should act as facades to domain logic
 - Services should be injectable classes with descriptive names ending with 'Service'
 - Service methods should return Promises for async operations
-- Service dependencies should be injected via constructor
+- Service dependencies must be injected via constructor:
+  ```typescript
+  export class AccountService {
+    constructor(private readonly accountRepository: AccountRepository) {}
+    
+    async getAccounts(): Promise<Account[]> {
+      return this.accountRepository.fetchAccounts();
+    }
+  }
+  ```
 - Application services must not depend on infrastructure components
+- Application services must not directly instantiate infrastructure implementations
 
 ## Domain Models
 - Domain entities should be defined as TypeScript interfaces
-- Prefer readonly properties for immutable entity attributes
 - Use descriptive, domain-specific naming for entity properties
 - Repository interfaces should be defined in the domain layer
 - Domain models must only depend on other domain models or shared kernels
 
 ## Repository Pattern
-- Define repository interfaces in the domain layer
-- Implement repositories in the infrastructure/secondary layer
+- Define repository interfaces in the domain layer:
+  ```typescript
+  export interface AccountRepository {
+    fetchAccounts(): Promise<Account[]>;
+  }
+  ```
+- Implement repositories in the infrastructure/secondary layer:
+  ```typescript
+  export class AccountApiRepository implements AccountRepository {
+    async fetchAccounts(): Promise<Account[]> {
+      // Implementation details
+    }
+  }
+  ```
 - Repository method names should begin with verbs like 'fetch', 'save', 'delete'
 - Repository implementations should handle infrastructure concerns (API calls, error handling)
+- Repository interface and implementation must be in separate files
 
 ## Component Implementation
 - Use Vue's defineComponent for type safety in components
@@ -128,6 +173,18 @@
 - Each bounded context should be self-contained
 - Inter-context communication should only happen through well-defined interfaces
 - Primary adapters in one context can call secondary adapters in another context
+
+## Application Bootstrap
+- Dependency wiring must occur at the application bootstrap level
+- Consider using a composition root pattern to wire all dependencies
+- Never create service providers or factories in the application layer that reference infrastructure
+- Use a plugin or main.ts to wire repositories to services:
+  ```typescript
+  // Example in a Vue plugin or main.ts
+  const accountRepository = new AccountApiRepository();
+  const accountService = new AccountService(accountRepository);
+  app.provide(accountServiceKey, accountService);
+  ```
 
 ## Incremental Implementation Workflow
 - Implement one UI element at a time with only the necessary code for that element
@@ -182,8 +239,8 @@
     - Negative amounts: Use var(--negative-amount) color
 
 - Account type display:
-  - Backend type "checking" should display as "Checking account" or "Compte courant" in French
-  - Backend type "saving" should display as "Savings account" or "Compte épargne" in French
+  - Backend type "checking" should display as "Compte courant" in French
+  - Backend type "saving" should display as "Compte épargne" in French
 
 ### Implementation Patterns
 - Use pure functions for formatting logic:
