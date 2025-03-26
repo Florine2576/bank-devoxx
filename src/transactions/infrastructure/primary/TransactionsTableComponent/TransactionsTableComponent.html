@@ -1,6 +1,9 @@
 <div class="transactions-section">
   <div class="transactions-header">
     <h2 class="section-title">Transactions récentes</h2>
+    <button class="new-transfert-button" data-selector="new-transfert" @click="navigateToNewTransfert">
+      <span class="plus-icon">+</span> Nouveau virement
+    </button>
   </div>
   
   <div class="transactions-table-container" v-if="!loading && !error">

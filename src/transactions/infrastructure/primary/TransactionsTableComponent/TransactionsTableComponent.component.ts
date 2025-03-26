@@ -1,4 +1,5 @@
 import { defineComponent, inject, ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import type { Transaction } from '../../../domain/Transaction';
 import { transactionServiceKey } from '../../../application/TransactionService';
 
@@ -49,13 +50,20 @@ export default defineComponent({
       }
     });
 
+    const router = useRouter();
+
+    const navigateToNewTransfert = () => {
+      router.push('/new-transfert');
+    };
+
     return {
       transactions,
       loading,
       error,
       formatAmount,
       formatDate,
-      getAmountClass
+      getAmountClass,
+      navigateToNewTransfert
     };
   }
 });

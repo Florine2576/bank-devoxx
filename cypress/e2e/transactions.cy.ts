@@ -43,5 +43,14 @@ describe('Transactions', () => {
       cy.get(dataSelector('transactions-date')).eq(0).contains('28 Mars 2025');
       cy.get(dataSelector('transactions-amount')).eq(0).contains('-2 500€');
     });
+
+    it('should redirect to new transfert page', () => {
+      cy.visit('/');
+
+      cy.get(dataSelector('new-transfert')).click();
+
+      cy.url().should('eq', Cypress.config().baseUrl + '/new-transfert');
+    })
+
   });
 });
