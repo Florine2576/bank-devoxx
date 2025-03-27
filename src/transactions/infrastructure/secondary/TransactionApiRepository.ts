@@ -1,4 +1,5 @@
 import type { Transaction } from '../../domain/Transaction';
+import type { NewTransaction } from '../../domain/NewTransaction';
 import type { TransactionRepository } from '../../domain/TransactionRepository';
 
 interface TransactionApiResponse {
@@ -25,6 +26,25 @@ export class TransactionApiRepository implements TransactionRepository {
         ...transaction,
         date: new Date(transaction.date)
       }));
+    } catch (error) {
+      console.error('Error in TransactionApiRepository:', error);
+      throw error;
+    }
+  }
+
+  async createTransaction(newTransaction: NewTransaction): Promise<void> {
+    try {
+      const response = await fetch('/api/accounts/transactions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newTransaction),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
     } catch (error) {
       console.error('Error in TransactionApiRepository:', error);
       throw error;
