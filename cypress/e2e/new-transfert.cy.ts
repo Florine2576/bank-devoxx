@@ -1,6 +1,6 @@
 import { dataSelector } from '../dataselector'
 
-describe('Transactions', () => {
+describe('New Transfert', () => {
   beforeEach(() => {
     cy.intercept('/api/accounts', { fixture: 'accounts.json' }).as('account')
 
@@ -9,7 +9,7 @@ describe('Transactions', () => {
 
   it('should create new transfert', () => {
     const newTransaction = {
-      label: "Virement à Florine",
+      description: "Virement à Florine",
       amount: 150,
       type: "Virement"
     }
@@ -19,7 +19,7 @@ describe('Transactions', () => {
 
     cy.visit('/new-transfert')
 
-    cy.get(dataSelector("label")).type(newTransaction.label);
+    cy.get(dataSelector("description")).type(newTransaction.description);
     cy.get(dataSelector("amount")).type(newTransaction.amount.toFixed(0));
     cy.get(dataSelector("save")).click();
 

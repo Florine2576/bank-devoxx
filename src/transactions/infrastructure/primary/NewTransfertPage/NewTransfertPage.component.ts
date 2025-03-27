@@ -14,7 +14,7 @@ export default defineComponent({
     }
 
     const newTransaction = ref<NewTransaction>({
-      label: '',
+      description: '',
       amount: 0
     });
 

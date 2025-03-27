@@ -1,4 +1,4 @@
 export interface NewTransaction {
-  label: string;
+  description: string;
   amount: number;
 }
