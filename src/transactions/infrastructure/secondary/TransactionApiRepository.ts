@@ -34,12 +34,17 @@ export class TransactionApiRepository implements TransactionRepository {
 
   async createTransaction(newTransaction: NewTransaction): Promise<void> {
     try {
+      const apiTransaction = {
+        ...newTransaction,
+        type: "Virement" // Add the type field for the API
+      };
+
       const response = await fetch('/api/accounts/transactions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newTransaction),
+        body: JSON.stringify(apiTransaction),
       });
 
       if (!response.ok) {

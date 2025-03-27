@@ -11,6 +11,7 @@ describe('Transactions', () => {
     const newTransaction = {
       label: "Virement à Florine",
       amount: 150,
+      type: "Virement"
     }
     cy.intercept('POST', '/api/accounts/transactions', (req) => {
       expect(JSON.stringify(req.body)).to.be.equal(JSON.stringify(newTransaction))
