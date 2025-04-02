@@ -8,10 +8,22 @@
 ## Hexagonal Architecture
 - Each bounded context should follow hexagonal architecture with these layers:
   - domain/ - Core business logic and entities (directly in domain, not in model subfolder)
+    - Entity models should be defined in their own files (e.g., `Account.ts`)
+    - Repository interfaces must be defined in the domain layer (e.g., `AccountRepository.ts`)
+    - No dependencies outside domain or shared kernels allowed
   - application/ - Application services and use cases
+    - Services must receive repository interfaces via constructor injection
+    - Services must not directly instantiate repositories
+    - No direct dependencies on infrastructure implementations
+    - Service injection keys must be exported with Symbol
   - infrastructure/
     - primary/ - UI components, controllers, entry points
+      - Must use Vue's inject to obtain application services
+      - Must never directly reference or instantiate secondary adapters
+      - Must handle presentation logic only
     - secondary/ - Repositories, external services, adapters
+      - Must implement domain repository interfaces
+      - Should handle all infrastructure concerns (API, storage, etc.)
 
 ## Component Structure (4-File Pattern)
 - Each component must be split into 4 separate files:
@@ -40,6 +52,221 @@
 - Use CSS variables for consistent theming
 - Define global variables in App.css
 - Use specific classes to avoid style conflicts
+- Use hyphens (-) instead of underscores (_) for HTML class names and CSS selectors (e.g., `account-card-label` not `account_card_label`)
 
 ## Testing & Data Selectors
 - Use data-selector attributes for testing (e.g., data-selector="nav-item-transaction")
+- Every UI element that needs to be tested must have a data-selector attribute
+- Use the dataSelector utility function from cypress/dataselector.ts for selector references
+- Navigation items must have data-selectors with format "nav-item-{contextName}"
+- Account information elements must use data-selectors with format "{accountType}-account-{property}"
+- Transaction table must use specific data-selectors:
+  - 'transaction-rows' for table rows
+  - 'transactions-header' for column headers
+  - 'transactions-{property}' for each transaction property cell (description, id, type, account, date, amount)
+- To run tests use : 
+    - npm run test:e2e:headless
+    - npm run test:unit
+
+## API Mocking
+- Cypress tests should intercept API calls and provide fixture data
+- Fixtures should be stored in cypress/fixtures/ directory with meaningful names
+- API endpoints should follow RESTful conventions
+
+## Dependency Injection
+- Use Vue's inject/provide system for dependency injection
+- Define typed injection keys using Symbol and InjectionKey interface from Vue:
+  ```typescript
+  export const accountServiceKey: InjectionKey<AccountService> = Symbol('AccountService');
+  ```
+- Export injection keys with descriptive names ending with 'Key' (e.g., `transactionServiceKey`)
+- Validate injected dependencies with null checks in component setup methods:
+  ```typescript
+  const accountService = inject<AccountService>(accountServiceKey);
+  if (!accountService) {
+    throw new Error('AccountService not provided');
+  }
+  ```
+- Application services must never be instantiated in components
+- Do not use service locator patterns that reference infrastructure components
+
+## Application Services
+- Application services should act as facades to domain logic
+- Services should be injectable classes with descriptive names ending with 'Service'
+- Service methods should return Promises for async operations
+- Service dependencies must be injected via constructor:
+  ```typescript
+  export class AccountService {
+    constructor(private readonly accountRepository: AccountRepository) {}
+    
+    async getAccounts(): Promise<Account[]> {
+      return this.accountRepository.fetchAccounts();
+    }
+  }
+  ```
+- Application services must not depend on infrastructure components
+- Application services must not directly instantiate infrastructure implementations
+
+## Domain Models
+- Domain entities should be defined as TypeScript interfaces
+- Use descriptive, domain-specific naming for entity properties
+- Repository interfaces should be defined in the domain layer
+- Domain models must only depend on other domain models or shared kernels
+
+## Repository Pattern
+- Define repository interfaces in the domain layer:
+  ```typescript
+  export interface AccountRepository {
+    fetchAccounts(): Promise<Account[]>;
+  }
+  ```
+- Implement repositories in the infrastructure/secondary layer:
+  ```typescript
+  export class AccountApiRepository implements AccountRepository {
+    async fetchAccounts(): Promise<Account[]> {
+      // Implementation details
+    }
+  }
+  ```
+- Repository method names should begin with verbs like 'fetch', 'save', 'delete'
+- Repository implementations should handle infrastructure concerns (API calls, error handling)
+- Repository interface and implementation must be in separate files
+
+## Component Implementation
+- Use Vue's defineComponent for type safety in components
+- Components should have a descriptive name property matching the filename
+- Register child components explicitly in the components object
+- Use the setup() function for component logic
+- Reference domain types with explicit imports
+
+## Error Handling
+- Use try/catch blocks for async operations
+- Provide meaningful error messages
+- Log errors to console with appropriate error level and context
+- Set fallback/empty states when errors occur
+
+## Imports and Code Organization
+- Use relative paths for imports within the same bounded context
+- Use absolute paths with '@' alias for imports across bounded contexts
+- Group imports by type (Vue, domain, infrastructure, etc.)
+- Export types and interfaces with the 'type' keyword
+
+## Hexagonal Architecture Enforcement
+- Domain layer must not depend on anything outside of domain or shared kernels
+- Application layer must not depend on infrastructure components
+- Primary adapters must not depend on secondary adapters
+- Secondary adapters must not depend on application services
+- Secondary adapters must not depend on primary adapters within the same context
+- Bounded contexts must not depend on domain models from other contexts unless explicitly defined as shared kernels
+
+## TypeScript Adapters Pattern
+- TypeScript adapters in primary layer must have names starting with 'TypeScript'
+- TypeScript adapters must only be called from secondary adapters
+- This pattern is required when connecting two bounded contexts
+
+## SharedKernel Usage
+- SharedKernel classes should be used for cross-cutting concerns
+- Bounded contexts may depend on SharedKernel components
+- SharedKernel should be kept minimal to avoid tight coupling
+
+## Context Boundaries
+- Each bounded context should be self-contained
+- Inter-context communication should only happen through well-defined interfaces
+- Primary adapters in one context can call secondary adapters in another context
+
+## Application Bootstrap
+- Dependency wiring must occur at the application bootstrap level
+- Consider using a composition root pattern to wire all dependencies
+- Never create service providers or factories in the application layer that reference infrastructure
+- Use a plugin or main.ts to wire repositories to services:
+  ```typescript
+  // Example in a Vue plugin or main.ts
+  const accountRepository = new AccountApiRepository();
+  const accountService = new AccountService(accountRepository);
+  app.provide(accountServiceKey, accountService);
+  ```
+
+## Incremental Implementation Workflow
+- Implement one UI element at a time with only the necessary code for that element
+- Run the appropriate tests for each element after implementation:
+  - E2E tests with `npm run test:e2e:headless`
+  - Architecture tests with `npm run test:unit`
+- Verify the visual appearance matches the mockup using browser preview
+- Only proceed to implementing the next element after:
+  - All tests are passing for the current element
+  - The visual appearance matches the mockup
+  - The code follows hexagonal architecture principles
+
+## API Data Mapping
+
+### Domain Model Definitions
+- Account domain model should include an enum for account types:
+  ```typescript
+  export enum AccountType {
+    CHECKING = 'CHECKING',
+    SAVING = 'SAVING'
+  }
+  ```
+- Transaction domain model should represent dates as JavaScript Date objects to enable proper formatting
+
+### Repository Layer Implementation
+- Each bounded context should have dedicated repository interfaces in the domain layer
+- Repository implementations in the secondary adapter layer should:
+  - Transform backend data structures to domain models
+  - Handle API request/response lifecycle
+  - Implement error handling with appropriate fallbacks
+  - Convert raw date strings from API to JavaScript Date objects
+  - Map backend account type strings to frontend AccountType enum values
+
+### Data Formatting Standards
+- Date formatting:
+  - Repository layer: Convert ISO string dates (`YYYY-MM-DD`) to JavaScript Date objects
+  - Presentation layer: Format dates as `DD Month YYYY` using French month names:
+    ```
+    ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 
+     'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+    ```
+  - Example: "28 Mars 2025"
+
+- Amount formatting:
+  - Monetary values should display with the following format:
+    - Thousand separator: space character
+    - Sign prefix: + for positive amounts, - for negative amounts
+    - Currency suffix: € symbol
+    - Example: "+1 234€" or "-2 500€"
+  - Style with different colors based on amount sign:
+    - Positive amounts: Use var(--positive-amount) color
+    - Negative amounts: Use var(--negative-amount) color
+
+- Account type display:
+  - Backend type "checking" should display as "Compte courant" in French
+  - Backend type "saving" should display as "Compte épargne" in French
+
+### Implementation Patterns
+- Use pure functions for formatting logic:
+  - Create standalone formatting functions for dates and monetary amounts
+  - These functions should be implemented in components that display this data
+  - Apply consistent formatting across all components displaying the same data type
+  - Example pattern for amount formatting:
+    ```typescript
+    const formatAmount = (amount: number): string => {
+      // Logic to format with thousands separator, sign prefix, and € suffix
+    }
+    ```
+  - Example pattern for date formatting:
+    ```typescript
+    const formatDate = (date: Date): string => {
+      // Logic to format using French month names
+    }
+    ```
+
+### API Response Transformation
+- When fetching accounts data:
+  - Transform flat structure to array of typed account objects
+  - Map backend property names to domain model property names
+  - Example mapping: `{checking: 6544, saving: 9644}` → `[{type: AccountType.CHECKING, amount: 6544}, {type: AccountType.SAVING, amount: 9644}]`
+
+- When fetching transactions data:
+  - Convert date strings to Date objects
+  - Preserve other properties as-is
+  - Example: `{date: "2025-03-28", ...}` → `{date: new Date("2025-03-28"), ...}`

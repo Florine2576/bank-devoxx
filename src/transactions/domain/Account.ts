@@ -1,6 +1,6 @@
 export enum AccountType {
-  CHECKING = 'checking',
-  SAVING = 'saving'
+  CHECKING = 'CHECKING',
+  SAVING = 'SAVING'
 }
 
 export interface Account {

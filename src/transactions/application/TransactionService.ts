@@ -1,18 +1,18 @@
-import type { Account } from '../domain/Account';
-import type { AccountRepository } from '../domain/AccountRepository';
-import type { Transaction } from '../domain/Transaction';
 import type { InjectionKey } from 'vue';
-
-export const transactionServiceKey: InjectionKey<TransactionService> = Symbol('TransactionService');
+import type { Transaction } from '../domain/Transaction';
+import type { TransactionRepository } from '../domain/TransactionRepository';
 
 export class TransactionService {
-  constructor(private readonly accountRepository: AccountRepository) {}
-
-  async getAccounts(): Promise<Account[]> {
-    return this.accountRepository.fetchAccounts();
-  }
+  constructor(private readonly transactionRepository: TransactionRepository) {}
 
   async getTransactions(): Promise<Transaction[]> {
-    return this.accountRepository.fetchTransactions();
+    try {
+      return await this.transactionRepository.fetchTransactions();
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+      return [];
+    }
   }
 }
+
+export const transactionServiceKey: InjectionKey<TransactionService> = Symbol('TransactionService');

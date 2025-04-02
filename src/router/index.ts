@@ -1,5 +1,3 @@
-import ProfilPage from '@/profil/infrastructure/primary/ProfilPage.vue'
-import TransactionsPage from '@/transactions/infrastructure/primary/TransactionsPage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -8,12 +6,12 @@ const router = createRouter({
     {
       path: '/',
       name: 'transactions',
-      component: TransactionsPage
+      component: () => import('../transactions/infrastructure/primary/TransactionsPage/TransactionsPage.vue')
     },
     {
       path: '/profil',
       name: 'profil',
-      component: ProfilPage
+      component: () => import('../profil/infrastructure/primary/ProfilPage/ProfilPage.vue')
     }
   ]
 })
