@@ -1,4 +1,4 @@
-# Bank-Devoxx Application Architecture Rules
+# Bank Application Architecture Rules
 
 ## Bounded Context Structure
 - Each feature should be implemented as a separate bounded context (e.g., navigation, transactions, profil)
