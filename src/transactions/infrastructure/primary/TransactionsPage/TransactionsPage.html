@@ -1,5 +1,8 @@
 <div class="transactions-page">
-  <h1 class="page-title">Transactions</h1>
+  <div class="header">
+    <h1 class="page-title">Transactions</h1>
+    <button class="new-transfert-button" data-selector="new-transfert" @click="navigateToNewTransfert">+ Nouveau virement</button>
+  </div>
   <accounts-component />
   <transactions-table-component />
 </div>

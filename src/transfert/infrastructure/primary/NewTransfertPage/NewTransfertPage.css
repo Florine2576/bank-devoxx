@@ -1,0 +1,59 @@
+.new-transfert-page {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  background-color: #f8f9fa;
+}
+
+.new-transfert-page h1 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.form-container {
+  background-color: white;
+  border-radius: 8px;
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.form-group {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.save-button {
+  background-color: #3730ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.save-button:hover {
+  background-color: #2a23cc;
+}
