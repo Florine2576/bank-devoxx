@@ -1,61 +1,62 @@
-# bank
+# 🏦 Banking Application Frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+[![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)](https://vuejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Cypress](https://img.shields.io/badge/Cypress-17202C?style=for-the-badge&logo=cypress&logoColor=white)](https://www.cypress.io/)
 
-## Recommended IDE Setup
+This project serves as a frontend for a banking application demo. It provides user interfaces for viewing account information, transactions, and managing banking operations.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## 🛠️ Prerequisites
 
-## Type Support for `.vue` Imports in TS
+- Node.js (v16 or higher)
+- npm (v7 or higher)
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## 📥 Installation
 
-## Customize configuration
+Clone the repository and install dependencies:
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+```bash
+# Clone the repository
+git clone <repository-url>
 
-## Project Setup
+# Navigate to the project directory
+cd bank-front
 
-```sh
+# Install dependencies
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+## 🚀 Running the Application
 
-```sh
+To start the development server:
+
+```bash
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+This will launch the application in development mode. Open your browser and navigate to the URL shown in the terminal (typically http://localhost:5173).
 
-```sh
-npm run build
+## 🧪 Testing
+
+The project includes two types of tests:
+
+### End-to-End Tests (Cypress)
+
+Run Cypress tests in headless mode:
+
+```bash
+npm run test:e2e:headless
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### Hexagonal Architecture Tests
 
-```sh
+Verify that the code follows hexagonal architecture principles:
+
+```bash
 npm run test:unit
 ```
 
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
+## 🔄 Backend Repository
 
-```sh
-npm run test:e2e:dev
-```
-
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
-
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
-
-```sh
-npm run build
-npm run test:e2e
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+The backend for this application can be found at:
+[https://github.com/cvirieux/bank-devoxx-back](https://github.com/cvirieux/bank-devoxx-back)
