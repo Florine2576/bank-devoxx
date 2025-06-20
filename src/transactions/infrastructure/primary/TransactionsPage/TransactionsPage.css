@@ -1,12 +1,14 @@
 .transactions-page {
-  padding: 20px;
-  max-width: 1200px;
+  padding: 30px 40px;
+  max-width: 1440px;
   margin: 0 auto;
+  background-color: var(--light-gray-bg);
 }
 
 .page-title {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 600;
-  color: #333;
-  margin-bottom: 20px;
+  color: var(--dark-blue-text);
+  margin-bottom: 30px;
+  font-family: 'Inter', sans-serif;
 }

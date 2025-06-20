@@ -1,6 +1,15 @@
 :root {
-  --positive-amount: #4caf50;
-  --negative-amount: #f44336;
+  --positive-amount: #16DBAA;
+  --negative-amount: #FE5C73;
+  --primary-blue: #1814F3;
+  --dark-blue-text: #343C6A;
+  --light-gray-bg: #F5F7FA;
+  --table-header-text: #718EBF;
+  --table-content-text: #232323;
+  --table-row-separator: #F2F4F7;
+  --card-border-radius: 25px;
+  --blue-gradient: linear-gradient(to bottom, #4C49ED, #0A06F4);
+  --green-gradient: linear-gradient(to bottom, #41D4A8, #128980);
 }
 
 * {
@@ -10,9 +19,9 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f5f7fa;
-  color: #333;
+  font-family: 'Inter', Arial, sans-serif;
+  background-color: var(--light-gray-bg);
+  color: var(--dark-blue-text);
 }
 
 .app {
@@ -24,4 +33,5 @@ body {
   flex: 1;
   padding: 0;
   overflow-y: auto;
+  margin-left: 250px;
 }

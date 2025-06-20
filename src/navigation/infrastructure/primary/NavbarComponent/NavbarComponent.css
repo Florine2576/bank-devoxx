@@ -1,11 +1,14 @@
 .navbar {
   display: flex;
   flex-direction: column;
-  width: 225px;
+  width: 250px;
   height: 100vh;
   background-color: #fff;
-  border-right: 1px solid #eaeaea;
+  border-right: 1px solid var(--table-row-separator);
   padding: 20px 0;
+  position: fixed;
+  left: 0;
+  top: 0;
 }
 
 .navbar-logo {
@@ -20,9 +23,10 @@
 }
 
 .logo-text {
-  font-size: 24px;
-  font-weight: 600;
-  color: #1A41B6;
+  font-size: 25px;
+  font-weight: 700;
+  font-family: 'Montserrat Alternates', sans-serif;
+  color: var(--dark-blue-text);
 }
 
 .navbar-menu {
@@ -36,20 +40,20 @@
   align-items: center;
   padding: 12px 20px;
   cursor: pointer;
-  color: #666;
+  color: #B1B1B1;
   transition: background-color 0.2s, color 0.2s;
   border-left: 3px solid transparent;
 }
 
 .navbar-item:hover {
-  background-color: rgba(26, 65, 182, 0.05);
-  color: #1A41B6;
+  background-color: rgba(24, 20, 243, 0.05);
+  color: var(--primary-blue);
 }
 
 .navbar-item.active {
-  background-color: rgba(26, 65, 182, 0.1);
-  color: #1A41B6;
-  border-left: 3px solid #1A41B6;
+  background-color: rgba(24, 20, 243, 0.1);
+  color: var(--primary-blue);
+  border-left: 3px solid var(--primary-blue);
 }
 
 .navbar-icon {
@@ -57,7 +61,7 @@
 }
 
 .navbar-item:first-child {
-  color: #1A41B6;
-  background-color: rgba(26, 65, 182, 0.1);
-  border-left: 3px solid #1A41B6;
+  color: var(--primary-blue);
+  background-color: rgba(24, 20, 243, 0.1);
+  border-left: 3px solid var(--primary-blue);
 }
